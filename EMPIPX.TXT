@@ -1,0 +1,71 @@
+{
+                 IPX/SPX Protocol Programming in Turbo Pascal 7+
+                 Data Structure types and procedures.
+
+                 Product of AZ-Group. Released on 13/03/1998
+                 By : Le Ngoc Thanh.
+}
+Unit EMPIPX;
+
+{$F+}
+{$A-}
+{$S-}
+{$W-}
+
+Interface
+
+Type
+
+  byte2=array [1..2] of byte;
+  byte4=array [1..4] of byte;
+  byte6=array [1..6] of byte;
+
+  Fragment_type = record
+     Address:Pointer;
+     Length :integer;
+    end;
+
+
+  IPXHeader = record
+     CheckSum             :word;
+     Length               :word;
+     Transport_control    :byte;
+     Packet_type          :byte;
+     Dest_Network_number  :byte4;
+     Dest_Network_node    :byte6;
+     Dest_Network_socket  :byte2;
+     Source_Network_number:byte4;
+     Source_Network_node  :byte6;
+     Source_Network_socket:byte2;
+    end;
+
+  ECB = record
+     Link_address         : pointer;
+     Event_svc_routine    : pointer;
+     In_use               : byte;
+     Completion_code      : byte;
+     Socket_number        : byte2;
+     Connection_ID        : word;
+     Reserved_1           : word;
+     Reserved_2           : array [1..12] of byte;
+     Immediate_address    : byte6;
+     Fragment_count       : word;
+     Fragment             : array [1..2] of Fragment_type;
+    end;
+
+Var
+  IPX_Addr      :pointer;
+  IPX_Result    :byte;
+  Network_Number:byte4;
+  Node_address  :byte6;
+
+Function  EMP_IPX_Install:boolean;
+Procedure EMP_IPX_Open_Socket(Socket_Number:integer);
+Procedure EMP_IPX_Close_Socket(Socket_number:integer);
+Procedure EMP_IPX_Send_Packet(ECB_Pointer:pointer);
+Procedure EMP_IPX_Listen_Packet(ECB_Pointer:pointer);
+Procedure EMP_IPX_breath;
+Procedure EMP_IPX_cancel(ECB_Pointer:pointer);
+Procedure EMP_IPX_get_localtarget(inbuf,outbuf: pointer );
+Procedure EMP_IPX_delay(ECB_Pointer:pointer; timeout: integer);
+
